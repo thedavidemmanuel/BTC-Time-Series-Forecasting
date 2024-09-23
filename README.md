@@ -137,50 +137,74 @@ The addition of dropout and L2 regularization helps prevent overfitting, allowin
 
 ## 5. Results and Evaluation
 
-After training our model, we evaluated its performance using several metrics:
+After training our model for 50 epochs, we evaluated its performance using several metrics on both the training and test datasets. Here are the results:
 
 ```
 Training Data Metrics:
-MSE: 584293.25
-RMSE: 764.39
-MAE: 451.17
-R2 Score: 0.9989
+MSE: 35409549.29
+RMSE: 5950.59
+MAE: 5722.07
+R2 Score: -1.7689
 
 Test Data Metrics:
-MSE: 1145862.50
-RMSE: 1070.45
-MAE: 626.98
-R2 Score: 0.9978
+MSE: 2426248.71
+RMSE: 1557.64
+MAE: 1156.44
+R2 Score: -0.0409
 ```
 
-These metrics indicate that our model performs well, with high R2 scores for both training and test data, suggesting good predictive power.
+### Interpretation of Results
 
-Here's a visualization of our model's predictions versus actual prices:
+1. **Mean Squared Error (MSE)**: The MSE is significantly higher for the training data (35,409,549.29) compared to the test data (2,426,248.71). This unusual pattern suggests that the model is performing worse on the data it was trained on, which is contrary to what we typically expect.
 
-[Insert your graph of predicted vs. actual BTC prices here]
+2. **Root Mean Squared Error (RMSE)**: The RMSE values (5950.59 for training and 1557.64 for test data) represent the average deviation of our predictions in the original price scale. These values are quite high, indicating substantial prediction errors.
 
-### Insights and Patterns
+3. **Mean Absolute Error (MAE)**: The MAE values (5722.07 for training and 1156.44 for test data) suggest that, on average, our predictions deviate by these amounts from the actual prices. Again, these values are high relative to typical Bitcoin price ranges.
 
-1. The model captures the overall trend of Bitcoin prices effectively.
-2. There's slightly higher error in periods of high volatility, which is expected in cryptocurrency markets.
-3. The model's performance on test data is close to its performance on training data, indicating good generalization.
+4. **R2 Score**: The negative R2 scores for both training (-1.7689) and test (-0.0409) data are particularly concerning. An R2 score below 0 indicates that the model is performing worse than a horizontal line (i.e., simply predicting the mean of the target variable).
 
-## 6. Conclusion
+### Analysis and Insights
 
-Working on this Bitcoin price forecasting project has been an enlightening experience. It has demonstrated both the potential and challenges of applying machine learning to financial time series data.
+1. **Poor Model Fit**: The negative R2 scores and high error metrics indicate that our model is not fitting the data well. It's performing worse than a baseline model that would simply predict the average price.
 
-### Challenges
+2. **Overfitting vs. Underfitting**: The fact that the model performs worse on the training data than on the test data is unusual. This could indicate a problem with how the model is learning from the data, possibly due to issues in data preprocessing, model architecture, or training process.
 
-1. **Data Volatility**: Bitcoin's price is highly volatile, making accurate prediction challenging.
-2. **External Factors**: Many external factors influence Bitcoin prices, which are not captured in historical price data alone.
-3. **Model Tuning**: Finding the right balance of model complexity, regularization, and training parameters required careful experimentation.
+3. **Scale of Errors**: The high RMSE and MAE values suggest that our predictions are off by thousands of dollars on average, which is significant in the context of Bitcoin prices.
 
-### Potential
+4. **Potential Data Issues**: The unusual pattern of having higher errors on training data might indicate problems with the training data itself, such as outliers or inconsistencies.
 
-Despite these challenges, our model shows promising results, indicating the potential of machine learning in cryptocurrency price prediction. Future work could explore:
+### Possible Reasons for Poor Performance
 
-1. Incorporating additional features like market sentiment or macroeconomic indicators.
-2. Experimenting with more advanced architectures like attention mechanisms or hybrid models.
-3. Extending the prediction horizon and exploring multi-step forecasting.
+1. **Data Quality**: There might be issues with the data, such as extreme outliers or inconsistencies that are affecting the model's ability to learn meaningful patterns.
 
-This project demonstrates the power of combining traditional time series analysis with modern deep learning techniques. While no model can predict Bitcoin prices with perfect accuracy, tools like these can provide valuable insights for decision-making in the cryptocurrency market.
+2. **Feature Engineering**: Our current feature set might not be capturing the relevant information needed to predict Bitcoin prices accurately.
+
+3. **Model Complexity**: The model might be either too simple to capture the complexity of Bitcoin price movements or too complex, leading to poor generalization.
+
+4. **Preprocessing Steps**: There could be issues in how we're preprocessing the data, such as the way we're handling missing values or scaling the data.
+
+5. **Temporal Aspects**: We might not be adequately capturing the temporal dependencies in the Bitcoin price data.
+
+### Next Steps
+
+Given these results, we need to revisit our approach:
+
+1. **Data Inspection**: Carefully examine the data for any anomalies, outliers, or patterns that might be causing issues.
+
+2. **Feature Selection/Engineering**: Reconsider our feature set and potentially incorporate additional relevant features or transform existing ones.
+
+3. **Model Architecture**: Experiment with different model architectures, possibly simpler models to establish a baseline, or more sophisticated models that can capture complex patterns.
+
+4. **Preprocessing Pipeline**: Review and possibly revise our data preprocessing steps, ensuring that we're not introducing any issues during this phase.
+
+5. **Baseline Comparison**: Implement simple baseline models (e.g., moving average, simple regression) to compare against our LSTM model.
+
+6. **Hyperparameter Tuning**: Conduct a thorough hyperparameter search to find optimal model parameters.
+
+7. **Cross-Validation**: Implement k-fold cross-validation to get a more robust estimate of model performance and ensure we're not facing a particularly unfortunate train-test split.
+
+While our current results are not as expected, they provide valuable insights into the challenges of predicting Bitcoin prices and highlight areas for improvement in our approach.
+
+![alt text](image.png)
+
+The visualization of predicted vs. actual prices should further illustrate the model's current performance and help identify patterns in where the model is failing to accurately predict prices.
